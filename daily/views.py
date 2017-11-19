@@ -45,21 +45,14 @@ def add_interval(request):
         if 'start' in request.POST:
             task = Task.objects.get(pk=request.POST['choice'])
             Interval.stop_active_interval(task)
-            print("Started:")
-            print(task)
             Interval.add(task)
-            print("Task added")
         elif 'end' in request.POST:
             task = Task.objects.get(pk=request.POST['choice'])
             Interval.stop_active_interval(task)
-            print("Ended:")
-            print(task)
-            pass
         return redirect('daily:index')
     else:
         return redirect('daily:index')
 
-# Currently not used...
 class IndexView(generic.ListView):
     template_name = 'daily/index.html'
     context_object_name = 'today_areas_list'
