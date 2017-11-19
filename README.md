@@ -9,10 +9,10 @@ Each Task contains zero to many "Intervals". These are periods of time spent doi
 
 Example:
 
-Programming
----Work on daily
-------9.00 - 9.50
-------10.00 - 10.30
+Programming  
+---Work on daily  
+------9.00 - 9.50  
+------10.00 - 10.30  
 
 By gathering up all these intervals, you'll be able to create a very accurate record of how you've spent your days.
 
