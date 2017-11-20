@@ -53,8 +53,12 @@ def add_task(request):
     
 def add_interval(request):
     if request.method == 'POST':
+        form = TaskForm(request.POST)
         try:
-            task = Task.objects.get(pk=request.POST['task_choice'])
+            if request.POST['task_choice']:
+                task = Task.objects.get(pk=request.POST['task_choice'])
+            else:
+                raise Exception()
         except:
             messages.error(request, 'You didn\'t select a Task to add an Interval to')
         else:
