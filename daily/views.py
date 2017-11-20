@@ -24,7 +24,7 @@ def index(request):
         return redirect('daily:index')
     else:
         timezone.activate(pytz.timezone("Australia/Sydney"))
-        today = timezone.now()
+        today = localtime(timezone.now())
         today_areas_list = Area.objects.filter(date__date=today)
         return render(request, 'daily/index.html', {
             'area_form': AreaForm(),
