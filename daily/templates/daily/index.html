@@ -1,63 +1,111 @@
-<h1>{{ today_date }}</h1>
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <title>Daily</title>
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bulma/0.6.1/css/bulma.min.css">
+    </head>
+    
+    {% load tz %}
+    <body>
+        <section class="hero is-primary is-small-medium" name="title">
+            <div class="hero-body">
+                <div class="container has-text-centered">
+                    <h1 class="title is-size-1">
+                        Daily
+                    </h1>
+                    <h2 class="subtitle">
+                        {{ today_date|localtime|date:"j F Y" }}
+                    </h2>
+                </div>
+            </div>
+        </section>
 
-{% if messages %}
-<ul class="messages">
-    {% for message in messages %}
-    <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
-    {% endfor %}
-</ul>
-{% endif %}
-
-<form action="{% url 'daily:index' %}" method="post">
-    {% csrf_token %}
-    {{ area_form }}
-    <input type="submit" name="add_area" value="Submit">
-</form>      
-
-<form action="{% url 'daily:index' %}" method="post">
-{% csrf_token %}
-{{ task_form }}
-<input type="submit" name="add_task" value="Add Task" />
-<p></p>
-<input type="submit" name="start_interval" value="Start Interval" />
-<input type="submit" name="end_interval" value="End Interval" />
-{% if today_areas_list %}
-    <ul>
-    {% for area in today_areas_list %}
-        <li>
-        {{ area.name }} - {{ area.date }} - {{ area.priority }}
-        <input type="radio" name="area_choice" id="choice{{ forloop.counter }}" value="{{ area.id }}" />
-        </li>
-        {% if area.task_set.all %}
-            <ul>
-            {% for task in area.task_set.all %}
-                <li>
-                    {{ task.name }} - {{ task.priority }}
-                    <input type="radio" name="task_choice" id="choice{{ forloop.counter }}" value="{{ task.id }}" />
-                        {% if task.interval_set.all %}
-                            <ul>
-                            {% for interval in task.interval_set.all %}
-                                <li>
-                                    {{ interval.start }} - {{ interval.end }}
-                                </li>
-                            {% endfor %}
-                            </ul>
-                        {% else %}
-                            <ul>
-                            <li>No Intervals for this area :)</li>
-                            </ul>
-                        {% endif %}
-                </li>
-            {% endfor %}
-            </ul>
-        {% else %}
-            <ul>
-            <li>No Tasks for this area :)</li>
-            </ul>
+        {% if messages %}
+        <section class="section" name="messages">
+            <div class="container">
+                <ul class="messages">
+                    {% for message in messages %}
+                    <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
+                    {% endfor %}
+                </ul>
+            </div>
+        </section>
         {% endif %}
-    {% endfor %}
-    </ul>
-{% else %}
-    <p>No Areas added for today. Add an Area to see it appear here :)</p>
-{% endif %}
-</form>      
+
+        <section class="section" name="areas">
+            <div class="container">
+                <div class="field">
+                    <label class="label">Area Name</label>
+                    <form action="{% url 'daily:index' %}" method="post">
+                        {% csrf_token %}
+                        {{ area_form }}
+                        <input type="submit" name="add_area" value="Add Area">
+                    </form>      
+                </div>
+                <div class="field">
+                    <form action="{% url 'daily:index' %}" method="post">
+                        <label class="label">Task Name</label>
+                        {{ task_form }}
+                        <input type="submit" name="add_task" value="Add Task" />
+                        <label class="label">Interval Controls</label>
+                        <input type="submit" name="start_interval" value="Start Interval" />
+                        <input type="submit" name="end_interval" value="End Interval" />
+                        {% csrf_token %}
+                        <section class="section" name="area_cards">
+                            {% if today_areas_list %}
+                                <ul>
+                                {% for area in today_areas_list %}
+                                    <div class="box">
+                                    {{ area.name }}
+                                    <input type="radio" name="area_choice" id="choice{{ forloop.counter }}" value="{{ area.id }}" />
+                                    {% if area.task_set.all %}
+                                            <ul>
+                                            {% for task in area.task_set.all %}
+                                                <div class="box">
+                                                    <div class="columns is-mobile">
+                                                        <div class="column narrow has-text-left">
+                                                            {{ task.name }}
+                                                            <input type="radio" name="task_choice" id="choice{{ forloop.counter }}" value="{{ task.id }}" />
+                                                        </div>
+                                                        <div class="column narrow has-text-right">
+                                                            <li>
+                                                            {% if task.interval_set.all %}
+                                                                <ul>
+                                                                {% for interval in task.interval_set.all %}
+                                                                    <li>
+                                                                        {{ interval.start|localtime|time:"P" }} - {{ interval.end|localtime|time:"P" }}
+                                                                    </li>
+                                                                {% endfor %}
+                                                                </ul>
+                                                            {% else %}
+                                                                <ul>
+                                                                <li>No Intervals for this area :)</li>
+                                                                </ul>
+                                                            {% endif %}
+                                                            </li>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            {% endfor %}
+                                            </ul>
+                                    {% else %}
+                                        <ul>
+                                        <li>No Tasks for this area :)</li>
+                                        </ul>
+                                    {% endif %}
+                                    </div>
+                                {% endfor %}
+                                </ul>
+                            {% else %}
+                                <p>No Areas added for today. Add an Area to see it appear here :)</p>
+                            {% endif %}
+                        </section>
+                    </form>
+                </div>
+            </div>
+        </section>
+    </body>
+</html>
