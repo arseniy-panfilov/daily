@@ -44,7 +44,7 @@ class Task(models.Model):
     
     def add(name, area, priority):
         """Adds a Task to a given Area"""
-        duplicates = Task.objects.filter(name=name)
+        duplicates = area.task_set.filter(name=name)
         if not duplicates.exists():
             return area.task_set.create(
                 name=name,
