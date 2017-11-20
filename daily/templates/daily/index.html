@@ -1,32 +1,39 @@
 <h1>{{ today_date }}</h1>
 
+{% if messages %}
+<ul class="messages">
+    {% for message in messages %}
+    <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
+    {% endfor %}
+</ul>
+{% endif %}
+
 <form action="{% url 'daily:index' %}" method="post">
     {% csrf_token %}
     {{ area_form }}
-    <input type="submit" value="Submit">
+    <input type="submit" name="add_area" value="Submit">
 </form>      
 
-<form action="{% url 'daily:add_task' %}" method="post">
+<form action="{% url 'daily:index' %}" method="post">
 {% csrf_token %}
 {{ task_form }}
-<input type="submit" value="Add Task" />
+<input type="submit" name="add_task" value="Add Task" />
+<p></p>
+<input type="submit" name="start_interval" value="Start Interval" />
+<input type="submit" name="end_interval" value="End Interval" />
 {% if today_areas_list %}
     <ul>
     {% for area in today_areas_list %}
         <li>
         {{ area.name }} - {{ area.date }} - {{ area.priority }}
-        <input type="radio" name="choice" id="choice{{ forloop.counter }}" value="{{ area.id }}" />
+        <input type="radio" name="area_choice" id="choice{{ forloop.counter }}" value="{{ area.id }}" />
         </li>
         {% if area.task_set.all %}
             <ul>
             {% for task in area.task_set.all %}
-                <form action="{% url 'daily:add_interval' %}" method="post">
-                {% csrf_token %}
                 <li>
                     {{ task.name }} - {{ task.priority }}
-                    <input type="radio" name="choice" id="choice{{ forloop.counter }}" value="{{ task.id }}" />
-                    <input type="submit" name="start" value="Start" />
-                    <input type="submit" name="end" value="End" />
+                    <input type="radio" name="task_choice" id="choice{{ forloop.counter }}" value="{{ task.id }}" />
                         {% if task.interval_set.all %}
                             <ul>
                             {% for interval in task.interval_set.all %}
@@ -41,7 +48,6 @@
                             </ul>
                         {% endif %}
                 </li>
-                </form>
             {% endfor %}
             </ul>
         {% else %}
