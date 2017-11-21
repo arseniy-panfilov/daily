@@ -2,6 +2,8 @@ from django.db import models
 from django.utils import timezone
 from django.utils.timezone import localtime
 
+from .gcal import GoogleCalendar
+
 import datetime
 
 class System():
@@ -74,6 +76,9 @@ class Interval(models.Model):
             self.duration = timezone.now() - start
         else:
             self.duration = self.end - self.start
+            
+    def export(self):
+        GoogleCalendar.add_interval_as_event(self)
 
     def stop_active_interval(task):
         intervals = task.interval_set.all()

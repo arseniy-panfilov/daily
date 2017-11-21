@@ -21,6 +21,16 @@ def index(request):
             add_task(request)
         elif request.POST.get('start_interval') or request.POST.get('end_interval'):
             add_interval(request)
+        elif request.POST.get('export'):
+            today = localtime(timezone.now())
+            today_intervals = Interval.objects.filter(start__date=today)
+            for interval in today_intervals:
+                if not interval.end:
+                    interval.end = timezone.now()
+                print("Exporting")
+                print(interval)
+                interval.export()
+            return redirect('daily:index')
         return redirect('daily:index')
     else:
         timezone.activate(pytz.timezone("Australia/Sydney"))
