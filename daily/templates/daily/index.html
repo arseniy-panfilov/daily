@@ -9,6 +9,7 @@
     </head>
     
     {% load tz %}
+    {% load widget_tweaks %}
     <body>
         <section class="hero is-primary is-small-medium" name="title">
             <div class="hero-body">
@@ -24,37 +25,56 @@
         </section>
 
         {% if messages %}
-        <section class="section" name="messages">
-            <div class="container">
-                <ul class="messages">
-                    {% for message in messages %}
-                    <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
-                    {% endfor %}
-                </ul>
-            </div>
-        </section>
+        <div class="container">
+            <ul class="messages">
+                {% for message in messages %}
+                <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
+                {% endfor %}
+            </ul>
+        </div>
         {% endif %}
 
         <section class="section" name="areas">
             <div class="container">
-                <label class="label">Area Name</label>
+                <section class="section">
+                    <form action="{% url 'daily:index' %}" method="post">
+                        <label class="label">Area Name</label>
+                        {% csrf_token %}
+                        <div class="field has-addons">
+                            <div class="control">
+                                {% render_field area_form.your_name class="input" %}
+                            </div>
+                            <div class="control">
+                                <input class="button is-primary" type="submit" name="add_area" value="Add Area"/>
+                            </div>
+                        </div>
+                    </form>      
+                </section>
                 <form action="{% url 'daily:index' %}" method="post">
-                    {% csrf_token %}
-                    {{ area_form }}
-                    <input type="submit" name="add_area" value="Add Area">
-                </form>      
-                <form action="{% url 'daily:index' %}" method="post">
-                    <label class="label">Task Name</label>
-                    {{ task_form }}
-                    <input type="submit" name="add_task" value="Add Task" />
-                    <div class="field is-grouped">
-                        <p class="control">
-                            <input class="button is-primary" type="submit" name="start_interval" value="Start Interval" />
-                        </p>
-                        <p class="control">
-                            <input class="button is-danger" type="submit" name="end_interval" value="End Interval" />
-                        </p>
-                    </div>
+                    <section class="section">
+                        <label class="label">Task Name</label>
+                        {% csrf_token %}
+                        <div class="field has-addons">
+                            <div class="control">
+                                {% render_field task_form.your_name class="input" %}
+                            </div>
+                            <div class="control">
+                                <input class="button is-primary" type="submit" name="add_task" value="Add Task" />
+                            </div>
+                        </div>
+                    </section>
+                    <section class="section">
+                        <div class="box">
+                            <div class="field is-grouped">
+                                <p class="control">
+                                    <input class="button is-primary" type="submit" name="start_interval" value="Start Interval" />
+                                </p>
+                                <p class="control">
+                                    <input class="button is-danger" type="submit" name="end_interval" value="End Interval" />
+                                </p>
+                            </div>
+                        </div>
+                    </section>
                     {% csrf_token %}
                     <section class="section" name="area_cards">
                         {% if today_areas_list %}
