@@ -5,7 +5,6 @@ class AreaForm(forms.Form):
         label='', 
         max_length=20,
         required=True,
-        widget=forms.TextInput(attrs={'class': 'special'})
     )
 
 class TaskForm(forms.Form):
