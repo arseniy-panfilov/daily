@@ -9,6 +9,7 @@ __pycache__/
 # Distribution / packaging
 .Python
 build/
+bin/
 develop-eggs/
 dist/
 downloads/
@@ -103,3 +104,4 @@ venv.bak/
 # mypy
 .mypy_cache/
 db.sqlite3
+daily/pip-selfcheck.json

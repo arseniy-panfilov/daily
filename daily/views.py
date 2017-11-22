@@ -21,10 +21,20 @@ def index(request):
             add_task(request)
         elif request.POST.get('start_interval') or request.POST.get('end_interval'):
             add_interval(request)
+        elif request.POST.get('export'):
+            today = localtime(timezone.now())
+            today_intervals = Interval.objects.filter(start__date=today)
+            for interval in today_intervals:
+                if not interval.end:
+                    interval.end = timezone.now()
+                print("Exporting")
+                print(interval)
+                interval.export()
+            return redirect('daily:index')
         return redirect('daily:index')
     else:
         timezone.activate(pytz.timezone("Australia/Sydney"))
-        today = timezone.now()
+        today = localtime(timezone.now())
         today_areas_list = Area.objects.filter(date__date=today)
         return render(request, 'daily/index.html', {
             'area_form': AreaForm(),
