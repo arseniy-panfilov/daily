@@ -1,5 +1,5 @@
 # daily
-A daily to do list with time tracking.
+A daily to do list with time tracking. Uses the Django framework.
 
 Each day is organised into "Areas". These are high level categories of things that need to be done.
 
