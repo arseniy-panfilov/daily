@@ -6,9 +6,13 @@ from django.urls import reverse
 from django.http import HttpResponseRedirect
 from django.contrib import messages
 
+from dateutil.parser import parse
+
 from .models import Area, Task, Interval
 from .forms import AreaForm, TaskForm
 import pytz
+import inspect
+import datetime
 
 def index(request):
     if request.method == 'POST':
@@ -35,14 +39,19 @@ def index(request):
     else:
         timezone.activate(pytz.timezone("Australia/Sydney"))
         today = localtime(timezone.now())
-        today_areas_list = Area.objects.filter(date__date=today)
-        return render(request, 'daily/index.html', {
-            'area_form': AreaForm(),
-            'task_form': TaskForm(),
-            'today_areas_list': today_areas_list,
-            'today_date': today,
-        })
+        return view_daily(request, today)
         
+def view_daily(request, date):
+    if isinstance(date, str):
+        date = parse(date)
+    today_areas_list = Area.objects.filter(date__date=date)
+    return render(request, 'daily/index.html', {
+        'area_form': AreaForm(),
+        'task_form': TaskForm(),
+        'today_areas_list': today_areas_list,
+        'today_date': date,
+    })
+
 def add_task(request):
     if request.method == 'POST':
         form = TaskForm(request.POST)
