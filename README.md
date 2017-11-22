@@ -16,4 +16,4 @@ Programming
 
 By gathering up all these intervals, you'll be able to create a very accurate record of how you've spent your days.
 
-Eventually there'll be automated exporting to Google Calendar, so that you'll be able to see all your intervals as entries.
+You can also export to Google Calendar, so that you'll be able to see all your intervals as calendar.
