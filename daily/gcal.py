@@ -64,6 +64,7 @@ class GoogleCalendar():
 
         event = {
             'summary': task.name,
+            'description': 'This is an automatically created calendar entry from Daily.',
             'start': {
                 'dateTime': interval.start.isoformat('T'),
                 'timeZone': interval.start.tzname(),
