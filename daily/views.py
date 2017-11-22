@@ -8,6 +8,7 @@ from django.contrib import messages
 
 from .models import Area, Task, Interval
 from .forms import AreaForm, TaskForm
+import pytz
 
 def index(request):
     if request.method == 'POST':
@@ -22,11 +23,9 @@ def index(request):
             add_interval(request)
         return redirect('daily:index')
     else:
-        today = localtime(timezone.now()).date()
+        timezone.activate(pytz.timezone("Australia/Sydney"))
+        today = timezone.now()
         today_areas_list = Area.objects.filter(date__date=today)
-        # Translate all DateTimes into local time
-        for area in today_areas_list:
-            area.date = localtime(area.date)
         return render(request, 'daily/index.html', {
             'area_form': AreaForm(),
             'task_form': TaskForm(),
