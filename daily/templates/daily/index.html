@@ -38,11 +38,11 @@
             <div class="container">
                 <div class="box">
                     <form action="{% url 'daily:index' %}" method="post">
-                        <label class="label">Area Name</label>
+                        <label class="label">New Area</label>
                         {% csrf_token %}
                         <div class="field has-addons">
                             <div class="control">
-                                {% render_field area_form.your_name class="input" %}
+                                {% render_field area_form.your_name class="input" placeholder="Area Name" %}
                             </div>
                             <div class="control">
                                 <input class="button is-primary" type="submit" name="add_area" value="Add Area"/>
@@ -52,11 +52,11 @@
                 </div>
                 <form action="{% url 'daily:index' %}" method="post">
                     <div class="box">
-                        <label class="label">Task Name</label>
+                        <label class="label">New Task</label>
                         {% csrf_token %}
                         <div class="field has-addons">
                             <div class="control">
-                                {% render_field task_form.your_name class="input" %}
+                                {% render_field task_form.your_name class="input" placeholder="Task Name" %}
                             </div>
                             <div class="control">
                                 <input class="button is-primary" type="submit" name="add_task" value="Add Task" />
@@ -119,9 +119,7 @@
                                                             {% endfor %}
                                                             </ul>
                                                         {% else %}
-                                                            <ul>
                                                             <li>No Intervals for this task yet :)</li>
-                                                            </ul>
                                                         {% endif %}
                                                         </li>
                                                     </div>
