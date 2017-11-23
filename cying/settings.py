@@ -25,7 +25,7 @@ SECRET_KEY = 'w7jq9*4+ev#n2^-bk7(m!_i*97rs13%!2zxawg-gv!02qzap2b'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['*']
 
 
 # Application definition
@@ -142,4 +142,6 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/1.11/howto/static-files/
 
-STATIC_URL = 'http://storage.googleapis.com/<your-gcs-bucket>/static/'
+STATIC_URL = 'http://storage.googleapis.com/daily-186804/static/'
+
+STATIC_ROOT = 'static/'
