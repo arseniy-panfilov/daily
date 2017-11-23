@@ -42,7 +42,7 @@
                             <label class="label">New Area</label>
                             {% csrf_token %}
                             <div class="field has-addons">
-                                <div class="control">
+                                <div class="control is-expanded">
                                     {% render_field area_form.your_name class="input" placeholder="Area Name" %}
                                 </div>
                                 <div class="control">
@@ -56,18 +56,18 @@
                             <label class="label">New Task</label>
                             {% csrf_token %}
                             <div class="field has-addons">
-                                <div class="control">
+                                <div class="control is-expanded">
                                     {% render_field task_form.your_name class="input" placeholder="Task Name" %}
                                 </div>
                                 <div class="control">
-                                    <input class="button is-primary" type="submit" name="add_task" value="Add Task" />
+                                    <input class="button is-full-width is-primary" type="submit" name="add_task" value="Add Task" />
                                 </div>
                             </div>
                         </div>
                 </div>
                 <div class="column">
                         <div class="box">
-                            <nav class="level is-mobile">
+                            <nav class="level">
                                 <div class="level-left">
                                     <div class="field is-grouped">
                                         <p class="control">
