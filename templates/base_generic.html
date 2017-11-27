@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        {% block meta %}
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <title>Daily</title>
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bulma/0.6.1/css/bulma.min.css"> 
+        {% endblock %}
+    </head>
+
+    <body>
+        {% block navbar %}
+        <nav class="navbar is-light" role="navigation" aria-label="main navigation">
+            <div class="navbar-brand">
+                <!-- navbar items, navbar burger... -->
+                <a class="navbar-item" href="{% url 'daily:index' %}">
+                    <img src="http://mfdaily.mandauefoam.ph/wp-content/uploads/2015/08/mf-daily-logo.png" alt="Daily: Your Daily Tracker" width="120" height="48">
+                </a>
+            </div>
+            <div class="navbar-menu is-active">
+                <div class="navbar-start">
+                    <!-- navbar items -->
+                </div>
+                <div class="navbar-end">
+                    <!-- navbar items -->
+                    <div class="navbar-item">
+                        <div class="field is-grouped">
+                            {% if user.is_authenticated %}
+                            <p class="control">
+                                <a class="button is-dark" href="{% url 'login'%}?next={{request.path}}">
+                                    <span class="icon">
+                                        <i class="fa fa-sign-in"></i>
+                                    </span>
+                                    <span>Login</span>
+                                </a>
+                            </p>
+                            {% else %}
+                            <p class="control">
+                                <a class="button is-dark" href="{% url 'logout'%}?next={{request.path}}">
+                                    <span class="icon">
+                                        <i class="fa fa-sign-out"></i>
+                                    </span>
+                                    <span>Logout</span>
+                                </a>
+                            </p>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </nav>
+        {% endblock %}
+        {% block content %}
+        {% endblock %}
+    </body>
+</html>
