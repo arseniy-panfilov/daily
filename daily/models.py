@@ -1,6 +1,7 @@
 from django.db import models
 from django.utils import timezone
 from django.utils.timezone import localtime
+from django.contrib.auth.models import User
 
 from .gcal import GoogleCalendar
 
@@ -15,6 +16,7 @@ class Area(models.Model):
     name = models.CharField(max_length=20)
     date = models.DateTimeField('date')
     priority = models.IntegerField(default=0)
+    user = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, blank=True)
     
     class Meta:
         ordering = ['date']
@@ -37,6 +39,7 @@ class Task(models.Model):
     name = models.CharField(max_length=50)
     priority = models.IntegerField(default=0)
     area = models.ForeignKey(Area, on_delete=models.CASCADE)
+    user = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, blank=True)
 
     class Meta:
         ordering = ['-priority']
@@ -59,6 +62,7 @@ class Interval(models.Model):
     end = models.DateTimeField('end time', null=True)
     duration = models.DurationField(null=True)
     task = models.ForeignKey(Task, on_delete=models.CASCADE)
+    user = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, blank=True)
     
     def add(task):
         """Creates and starts an Interval for the given Task"""
