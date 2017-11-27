@@ -24,14 +24,15 @@ class Area(models.Model):
     def __str__(self):
         return self.name
     
-    def add(name):
+    def add(name, user):
         """Creates a new Area for the date on which this function is called"""
         today = System.get_local_date()
         duplicates = Area.objects.filter(date__date=today).filter(name=name)
         if not duplicates.exists():
             return Area.objects.create(
                 name=name,
-                date=timezone.now()
+                date=timezone.now(),
+                user=user
             )
 
     
@@ -47,13 +48,14 @@ class Task(models.Model):
     def __str__(self):
         return self.name
     
-    def add(name, area, priority):
+    def add(name, area, priority, user):
         """Adds a Task to a given Area"""
         duplicates = area.task_set.filter(name=name)
         if not duplicates.exists():
             return area.task_set.create(
                 name=name,
-                priority=priority
+                priority=priority,
+                user=user
             )
 
     
@@ -64,10 +66,11 @@ class Interval(models.Model):
     task = models.ForeignKey(Task, on_delete=models.CASCADE)
     user = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, blank=True)
     
-    def add(task):
+    def add(task, user):
         """Creates and starts an Interval for the given Task"""
         interval = task.interval_set.create(
-            start=timezone.now()
+            start=timezone.now(),
+            user=user
         )
         return interval
 
@@ -84,8 +87,8 @@ class Interval(models.Model):
     def export(self):
         GoogleCalendar.add_interval_as_event(self)
 
-    def stop_active_interval(task):
-        intervals = task.interval_set.all()
+    def stop_active_interval(task, user):
+        intervals = task.interval_set.all().filter(user=user)
         for interval in intervals:
             if interval.end is None:
                 interval.stop()

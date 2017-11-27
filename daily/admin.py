@@ -3,6 +3,14 @@ from django.contrib import admin
 from .models import Area, Task, Interval
 
 # Register your models here.
-admin.site.register(Area)
-admin.site.register(Task)
-admin.site.register(Interval)
+@admin.register(Area)
+class AreaInstanceAdmin(admin.ModelAdmin):
+    pass
+
+@admin.register(Task)
+class TaskInstanceAdmin(admin.ModelAdmin):
+    pass
+
+@admin.register(Interval)
+class IntervalInstanceAdmin(admin.ModelAdmin):
+    pass

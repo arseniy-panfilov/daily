@@ -23,14 +23,14 @@ def index(request):
             form = AreaForm(request.POST)
             if form.is_valid():
                 name = form.cleaned_data['your_name']
-                Area.add(name)
+                Area.add(name, request.user)
         elif request.POST.get('add_task'):
             add_task(request)
         elif request.POST.get('start_interval') or request.POST.get('end_interval'):
             add_interval(request)
         elif request.POST.get('export'):
             today = localtime(timezone.now())
-            today_intervals = Interval.objects.filter(start__date=today)
+            today_intervals = Interval.objects.filter(start__date=today).filter(user=request.user)
             for interval in today_intervals:
                 if not interval.end:
                     interval.end = timezone.now()
@@ -47,7 +47,7 @@ def index(request):
 def view_daily(request, date):
     if isinstance(date, str):
         date = parse(date)
-    today_areas_list = Area.objects.filter(date__date=date)
+    today_areas_list = Area.objects.filter(date__date=date).filter(user=request.user)
     return render(request, 'daily/index.html', {
         'area_form': AreaForm(),
         'task_form': TaskForm(),
@@ -69,7 +69,7 @@ def add_task(request):
         else:
             if form.is_valid():
                 name = form.cleaned_data['your_name']
-                task = Task.add(name, area, 0)
+                task = Task.add(name, area, 0, request.user)
     return redirect('daily:index')
     
 def add_interval(request):
@@ -85,7 +85,7 @@ def add_interval(request):
         else:
             if 'start_interval' in request.POST:
                 Interval.stop_active_interval(task)
-                Interval.add(task)
+                Interval.add(task, request.user)
             elif 'end_interval' in request.POST:
                 Interval.stop_active_interval(task)
     return redirect('daily:index')
