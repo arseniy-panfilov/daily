@@ -29,20 +29,20 @@
                         <div class="field is-grouped">
                             {% if user.is_authenticated %}
                             <p class="control">
-                                <a class="button is-dark" href="{% url 'login'%}?next={{request.path}}">
-                                    <span class="icon">
-                                        <i class="fa fa-sign-in"></i>
-                                    </span>
-                                    <span>Login</span>
-                                </a>
-                            </p>
-                            {% else %}
-                            <p class="control">
-                                <a class="button is-dark" href="{% url 'logout'%}?next={{request.path}}">
+                                <a class="button is-primary" href="{% url 'logout'%}?next={{request.path}}">
                                     <span class="icon">
                                         <i class="fa fa-sign-out"></i>
                                     </span>
                                     <span>Logout</span>
+                                </a>
+                            </p>
+                            {% else %}
+                            <p class="control">
+                                <a class="button is-primary" href="{% url 'login'%}?next={{request.path}}">
+                                    <span class="icon">
+                                        <i class="fa fa-sign-in"></i>
+                                    </span>
+                                    <span>Login</span>
                                 </a>
                             </p>
                             {% endif %}

@@ -5,6 +5,8 @@ from django.utils.timezone import localtime
 from django.urls import reverse
 from django.http import HttpResponseRedirect
 from django.contrib import messages
+from django.contrib.auth.decorators import login_required
+
 
 from dateutil.parser import parse
 
@@ -14,6 +16,7 @@ import pytz
 import inspect
 import datetime
 
+@login_required
 def index(request):
     if request.method == 'POST':
         if request.POST.get('add_area'):
