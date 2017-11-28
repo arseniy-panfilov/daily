@@ -7,7 +7,7 @@ from .gcal import GoogleCalendar
 import datetime
 
 class System():
-    def get_local_date():
+    def get_local_date(): #
         return localtime(timezone.now()).date()
     
 
@@ -22,14 +22,14 @@ class Area(models.Model):
     def __str__(self):
         return self.name
     
-    def add(name):
+    def add(name): #
         """Creates a new Area for the date on which this function is called"""
         today = System.get_local_date()
-        duplicates = Area.objects.filter(date__date=today).filter(name=name)
+        duplicates = Area.objects.filter(date__date=today).filter(name=name) #
         if not duplicates.exists():
             return Area.objects.create(
                 name=name,
-                date=timezone.now()
+                date=timezone.now() #
             )
 
     
@@ -57,7 +57,7 @@ class Task(models.Model):
 class Interval(models.Model):
     start = models.DateTimeField('start time')
     end = models.DateTimeField('end time', null=True)
-    duration = models.DurationField(null=True)
+    duration = models.DurationField(null=True) #
     task = models.ForeignKey(Task, on_delete=models.CASCADE)
     
     def add(task):
@@ -73,7 +73,7 @@ class Interval(models.Model):
 
     def update_duration(self):
         if self.end is None:
-            self.duration = timezone.now() - start
+            self.duration = timezone.now() - start #
         else:
             self.duration = self.end - self.start
             
@@ -94,7 +94,7 @@ class Interval(models.Model):
         today_intervals = Interval.objects.filter(start__date=today)
         for interval in today_intervals:
             interval.update_duration()
-            if interval.end is None and (timezone.now() - interval.start) > datetime.timedelta(hours=4):
+            if interval.end is None and (timezone.now() - interval.start) > datetime.timedelta(hours=4): #
                 # Stop the interval and set its duration to 1 hour
                 interval.end = interval.start + datetime.timedelta(hours=1)
                 interval.update_duration()
