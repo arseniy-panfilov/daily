@@ -4,7 +4,14 @@ YOUR_INSTANCE_CONNECTION_NAME=daily-186904:australia-southeast1:daily-instance
 BUCKET_NAME=daily-186904
 
 run: check-venv
-	$(PYTHON) manage.py runserver
+	$(PYTHON) manage.py runserver 127.0.0.1:8000 --settings=cying.settings.local
+	
+migrate:
+	$(PYTHON) manage.py makemigrations --settings=cying.settings.local
+	$(PYTHON) manage.py migrate	--settings=cying.settings.local
+	
+test: check-venv
+	$(PYTHON) manage.py test
 
 check-venv:
 ifndef VIRTUAL_ENV
