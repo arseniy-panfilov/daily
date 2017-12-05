@@ -18,7 +18,7 @@ DATABASES = {
         # For MySQL, set 'PORT': '3306' instead of the following. Any Cloud
         # SQL Proxy instances running locally must also be set to tcp:3306.
         'PORT': '5432',
-    }
+    },
     'local': {
         'ENGINE': 'django.db.backends.sqlite3',
         'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
