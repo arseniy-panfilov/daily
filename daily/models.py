@@ -14,11 +14,12 @@ class System():
 
 class Area(models.Model):
     name = models.CharField(max_length=20)
-    date = models.DateTimeField('date')
+    date = models.DateTimeField('date', default=datetime.date.today)
     priority = models.IntegerField(default=0)
     user = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, blank=True)
     
     class Meta:
+        unique_together = (('name', 'date'),) 
         ordering = ['date']
     
     def __str__(self):
@@ -26,18 +27,14 @@ class Area(models.Model):
     
     def add(name, user):
         """Creates a new Area for the date on which this function is called"""
-        today = System.get_local_date()
-        duplicates = Area.objects.filter(date__date=today).filter(name=name)
-        if not duplicates.exists():
-            return Area.objects.create(
-                name=name,
-                date=timezone.now(),
-                user=user
-            )
+        return Area.objects.create(
+            name=name,
+            user=user
+        )
 
     
 class Task(models.Model):
-    name = models.CharField(max_length=50)
+    name = models.CharField(max_length=50, unique=True)
     priority = models.IntegerField(default=0)
     area = models.ForeignKey(Area, on_delete=models.CASCADE)
     user = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, blank=True)
@@ -50,17 +47,15 @@ class Task(models.Model):
     
     def add(name, area, priority, user):
         """Adds a Task to a given Area"""
-        duplicates = area.task_set.filter(name=name)
-        if not duplicates.exists():
-            return area.task_set.create(
-                name=name,
-                priority=priority,
-                user=user
-            )
+        return area.task_set.create(
+            name=name,
+            priority=priority,
+            user=user
+        )
 
     
 class Interval(models.Model):
-    start = models.DateTimeField('start time')
+    start = models.DateTimeField('start time', default=timezone.now()
     end = models.DateTimeField('end time', null=True)
     duration = models.DurationField(null=True)
     task = models.ForeignKey(Task, on_delete=models.CASCADE)
@@ -68,11 +63,9 @@ class Interval(models.Model):
     
     def add(task, user):
         """Creates and starts an Interval for the given Task"""
-        interval = task.interval_set.create(
-            start=timezone.now(),
+        return task.interval_set.create(
             user=user
         )
-        return interval
 
     def stop(self):
         self.end = timezone.now()
