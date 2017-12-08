@@ -13,6 +13,10 @@ migrate:
 	$(PYTHON) manage.py makemigrations
 	$(PYTHON) manage.py migrate
 	
+createsuperuser:
+	export DJANGO_SETTINGS_MODULE=cying.settings.local; \
+	$(PYTHON) manage.py createsuperuser
+	
 test: check-venv
 	export DJANGO_SETTINGS_MODULE=cying.settings.local; \
 	$(PYTHON) manage.py test

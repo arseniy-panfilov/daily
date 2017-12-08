@@ -84,10 +84,10 @@ def add_interval(request):
             messages.error(request, 'You didn\'t select a Task to add an Interval to')
         else:
             if 'start_interval' in request.POST:
-                Interval.stop_active_interval(task)
+                Interval.stop_active_interval(task, request.user)
                 Interval.add(task, request.user)
             elif 'end_interval' in request.POST:
-                Interval.stop_active_interval(task)
+                Interval.stop_active_interval(task, request.user)
     return redirect('daily:index')
 
 class IndexView(generic.ListView):
