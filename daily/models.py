@@ -55,7 +55,7 @@ class Task(models.Model):
 
     
 class Interval(models.Model):
-    start = models.DateTimeField('start time', default=timezone.now()
+    start = models.DateTimeField('start time', default=timezone.now())
     end = models.DateTimeField('end time', null=True)
     duration = models.DurationField(null=True)
     task = models.ForeignKey(Task, on_delete=models.CASCADE)
