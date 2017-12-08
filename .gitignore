@@ -107,3 +107,4 @@ venv.bak/
 db.sqlite3
 daily/pip-selfcheck.json
 cloud_sql_proxy
+cying/settings/secret.py

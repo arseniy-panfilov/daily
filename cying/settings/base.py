@@ -13,7 +13,7 @@ Good template to follow:
 https://github.com/imkevinxu/django-kevin/blob/master/project_name/config/settings/base.py
 """
 
-from .secret import *
+from .secret import SECRET_KEY as PROD_SECRET_KEY
 
 import os
 
@@ -21,7 +21,7 @@ import os
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'w7jq9*4+ev#n2^-bk7(m!_i*97rs13%!2zxawg-gv!02qzap2b'
+SECRET_KEY = PROD_SECRET_KEY
 
 ALLOWED_HOSTS = ['*']
 
