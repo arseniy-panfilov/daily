@@ -4,7 +4,8 @@ YOUR_INSTANCE_CONNECTION_NAME=daily-186904:australia-southeast1:daily-instance
 BUCKET_NAME=daily-186904
 
 run: check-venv
-	export DJANGO_SETTINGS_MODULE=cying.settings.local; \ # so that both commands execute in the same subshell
+# so that both commands execute in the same subshell
+	export DJANGO_SETTINGS_MODULE=cying.settings.local; \
 	$(PYTHON) manage.py runserver 127.0.0.1:8000
 	
 migrate:
