@@ -1,0 +1,50 @@
+{% for area in areas %}
+    <div class="box">
+        <div class="card-content">
+            <div class="media">
+                <div class="media-content">
+                    <p class="title is-4">
+                        <input type="radio" name="area_choice" id="area-{{ forloop.counter }}"
+                               value="{{ area.id }}" form="{{ tasks_form }}"/>
+                        <label for="area-{{ forloop.counter }}">{{ area.name }}</label>
+                    </p>
+                </div>
+            </div>
+        </div>
+        <div class="card-content">
+            {% if area.task_set.all %}
+                <ul>
+                    {% for task in area.task_set.all %}
+                        <li>
+                            <div class="box">
+                                <div class="columns is-mobile">
+                                    <div class="column narrow has-text-left">
+                                        <input type="radio" name="task_choice" id="task-{{ forloop.counter }}"
+                                               value="{{ task.id }}" form="{{ intervals_form }}"/>
+                                        <label for="task-{{ forloop.counter }}">{{ task.name }}</label>
+                                    </div>
+                                    <div class="column narrow has-text-right">
+
+                                        {% if task.interval_set.all %}
+                                            <ul>
+                                                {% for interval in task.interval_set.all %}
+                                                    <li>
+                                                        {{ interval.start|time:"P" }}
+                                                        - {{ interval.end|time:"P" }}
+                                                    </li>
+                                                {% endfor %}
+                                            </ul>
+                                        {% else %}
+                                            No Intervals for this task yet :)
+                                        {% endif %}
+                                    </div>
+                                </div>
+                            </div>
+                        </li>
+                    {% endfor %}
+                </ul>
+            {% endif %}
+        </div>
+    </div>
+    <p></p>
+{% endfor %}

@@ -1,135 +1,99 @@
-<!DOCTYPE html>
 {% extends "base_generic.html" %}
+{% load tz %}
+{% load widget_tweaks %}
 
 {% block content %}
-    {% load tz %}
-    {% load widget_tweaks %}
+
     <section class="hero is-primary is-small" name="title">
         <div class="hero-body">
             <div class="container has-text-centered">
                 <h2 class="subtitle">
-                    {{ today_date|localtime|date:"j F Y" }}
+                    {% now "j F Y" %}
                 </h2>
             </div>
         </div>
     </section>
 
     {% if messages %}
-    <div class="container">
-        <ul class="messages">
-            {% for message in messages %}
-            <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
-            {% endfor %}
-        </ul>
-    </div>
+        <div class="container">
+            <ul class="messages">
+                {% for message in messages %}
+                    <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
+                {% endfor %}
+            </ul>
+        </div>
     {% endif %}
 
     <section class="section" name="areas">
         <div class="columns">
             <div class="column is-narrow">
                 <div class="box">
-                    <form action="{% url 'daily:index' %}" method="post">
-                        <label class="label">New Area</label>
+                    <form id="areas_form" action="{% url 'daily:index' %}" method="post">
                         {% csrf_token %}
+                        <label class="label">New Area</label>
                         <div class="field has-addons">
                             <div class="control is-expanded">
                                 {% render_field area_form.your_name class="input" placeholder="Area Name" %}
                             </div>
                             <div class="control">
-                                <input class="button is-primary" type="submit" name="add_area" value="Add Area"/>
+                                <input class="button is-primary" type="submit" name="add_area"
+                                       value="Add Area"/>
                             </div>
                         </div>
-                    </form>      
+                    </form>
                 </div>
-                <form action="{% url 'daily:index' %}" method="post">
-                    <div class="box">
-                        <label class="label">New Task</label>
+
+                <div class="box">
+                    <form id='tasks_form' action="{% url 'daily:index' %}" method="post">
                         {% csrf_token %}
+                        <label class="label">New Task</label>
+
                         <div class="field has-addons">
                             <div class="control is-expanded">
                                 {% render_field task_form.your_name class="input" placeholder="Task Name" %}
                             </div>
                             <div class="control">
-                                <input class="button is-full-width is-primary" type="submit" name="add_task" value="Add Task" />
+                                <input class="button is-full-width is-primary" type="submit" name="add_task"
+                                       value="Add Task"/>
                             </div>
                         </div>
-                    </div>
+                    </form>
+                </div>
             </div>
             <div class="column">
-                    <div class="box">
+                <div class="box">
+                    <form id='intervals_form' action="{% url 'daily:index' %}" method="post">
+                        {% csrf_token %}
                         <nav class="level">
                             <div class="level-left">
                                 <div class="field is-grouped">
                                     <p class="control">
-                                        <input class="button is-primary" type="submit" name="start_interval" value="Start Interval" />
+                                        <input class="button is-primary" type="submit" name="start_interval"
+                                               value="Start Interval"/>
                                     </p>
                                     <p class="control">
-                                        <input class="button is-danger" type="submit" name="end_interval" value="End Interval" />
+                                        <input class="button is-danger" type="submit" name="end_interval"
+                                               value="End Interval"/>
                                     </p>
                                 </div>
                             </div>
                             <div class="level-right">
                                 <div class="field is-right">
                                     <p class="control">
-                                        <input class="button is-link" type="submit" name="export" value="Export to Google Calendar" />
+                                        <input class="button is-link" type="submit" name="export"
+                                               value="Export to Google Calendar"/>
                                     </p>
                                 </div>
                             </div>
                         </nav>
-                    </div>
-                {% csrf_token %}
-                    {% if today_areas_list %}
-                        {% for area in today_areas_list %}
-                            <div class="box">
-                                <div class="card-content">
-                                    <div class="media">
-                                        <div class="media-content">
-                                            <p class="title is-4">
-                                                <input type="radio" name="area_choice" id="choice{{ forloop.counter }}" value="{{ area.id }}" />
-                                                {{ area.name }}
-                                            </p>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="card-content">
-                                    {% if area.task_set.all %}
-                                        <ul>
-                                        {% for task in area.task_set.all %}
-                                            <div class="box">
-                                                <div class="columns is-mobile">
-                                                    <div class="column narrow has-text-left">
-                                                        <input type="radio" name="task_choice" id="choice{{ forloop.counter }}" value="{{ task.id }}" />
-                                                        {{ task.name }}
-                                                    </div>
-                                                    <div class="column narrow has-text-right">
-                                                        <li>
-                                                        {% if task.interval_set.all %}
-                                                            <ul>
-                                                            {% for interval in task.interval_set.all %}
-                                                                <li>
-                                                                    {{ interval.start|localtime|time:"P" }} - {{ interval.end|localtime|time:"P" }}
-                                                                </li>
-                                                            {% endfor %}
-                                                            </ul>
-                                                        {% else %}
-                                                            <li>No Intervals for this task yet :)</li>
-                                                        {% endif %}
-                                                        </li>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        {% endfor %}
-                                        </ul>
-                                    {% endif %}
-                                </div>
-                            </div>
-                            <p></p>
-                        {% endfor %}
-                    {% else %}
-                        <p>No Areas added for today. Add an Area to see it appear here :)</p>
-                    {% endif %}
-                </form>
+                    </form>
+                </div>
+                {% if today_areas_list %}
+                    {% include "daily/_areas_list.html" with areas=today_areas_list tasks_form="tasks_form" intervals_form="intervals_form" %}
+                {% else %}
+                    <p>No Areas added for today. Add an Area to see it appear here :)</p>
+                {% endif %}
             </div>
         </div>
     </section>
-{% endblock %}
+{% endblock content %}
